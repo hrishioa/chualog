@@ -12,14 +12,18 @@ def main():
 	counter=0
 	start_time = calendar.timegm(time.gmtime())
 	# First collect enough data to get a reasonable estimate of the average
+	history = []
+
 	average_count = 10000
 	average = 0.0
 
 	print "Pulling data for average: "
 
 	for i in xrange(0, average_count):
-		average+=(ADC.read(in_channel)*1.8)
+		val = (ADC.read(in_channel)*1.8)
+		average+=val
 		sys.stdout.write("Collected %d/%d samples.\r" % (i, average_count))
+		history.append(val)
 		sys.stdout.flush()
 	average /= average_count
 	speed = 0.0
@@ -29,7 +33,9 @@ def main():
 	while(True):
 		counter+=1
 		val = ADC.read(in_channel)*1.8
-		average = ((average*average_count)+val)/(average_count+1)
+		history[(counter-1) % (len(history))] = val
+		# average = ((average*average_count)+val)/(average_count+1)
+		average = sum(history)/len(history)
 		average_count+=1
 		with open(bitfile, "a") as file:
 			if val > average:
