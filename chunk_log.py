@@ -13,6 +13,8 @@ def main():
 
     chunk_no = 1
 
+    global_disparity = 0
+
     while(True):
         chunk_max = 10000
         chunk = []
@@ -23,20 +25,24 @@ def main():
             val = ADC.read(in_channel)*1.8
             if(calendar.timegm(time.gmtime()) != start_time):
                 speed = i/(calendar.timegm(time.gmtime())-start_time)
-            sys.stdout.write("\tPosition %d/%d in chunk %d. Current Voltage: %f V. Speed : %f.\t\r" % (i, chunk_max, chunk_no, val, speed))
+            sys.stdout.write("\tPosition %d/%d in chunk %d. Global Disparity: %d. Current Voltage: %f V. Speed : %f.\t\r" % (i, chunk_max, chunk_no, global_disparity, val, speed))
             sys.stdout.flush()
             chunk.append(val)
         print "\tCollection complete.\t\t\t\t\t"
         avg = sum(chunk)/len(chunk)
         print "\tWriting chunk to disk:"
+        disparity = 0
         with open(bitfile, 'a') as bf:
             for i in xrange(0, chunk_max):
                 if chunk[i] > avg:
                     bf.write("1")
+                    disparity+=1
                 elif chunk[i] < avg:
+                    disparity-=1
                     bf.write("0")
             bf.close()
-        print "Chunk %d written to disk." % chunk_no
+        print "Chunk %d written to disk. Disparity: %d" % (chunk_no, disparity)
+        global_disparity += disparity
         chunk_no+=1
 
     # while(True):
