@@ -30,6 +30,8 @@ def main():
 
 	print "Starting collection:\n"
 
+	disparity_count = 0
+
 	while(True):
 		counter+=1
 		val = ADC.read(in_channel)*1.8
@@ -40,12 +42,14 @@ def main():
 		with open(bitfile, "a") as file:
 			if val > average:
 				file.write("1")
+				disparity_count+=1
 			elif val < average:
 				file.write("0")
+				disparity_count-=1
 			file.close()
 		if(calendar.timegm(time.gmtime()) != start_time):
 			speed = average_count/(calendar.timegm(time.gmtime())-start_time)
-		sys.stdout.write("\t Counter: %d. Current Average: %f. Current Bit: %d. Current Voltage: %f. Speed : %f.\t\r" % (counter, average, 1 if val > average else (0 if val < average else -1), val, speed))
+		sys.stdout.write("\t Counter: %d. Disparity: %d. Current Average: %f. Current Bit: %d. Current Voltage: %f. Speed : %f.\t\r" % (counter, disparity_count, average, 1 if val > average else (0 if val < average else -1), val, speed))
 		sys.stdout.flush()
 
 	# while(True):
