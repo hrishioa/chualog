@@ -2,6 +2,7 @@ import Adafruit_BBIO.ADC as ADC
 from sys import argv
 import sys
 import calendar, time
+import numpy as np
 
 in_channel = "AIN1"
 
@@ -29,15 +30,15 @@ def main():
             sys.stdout.flush()
             chunk.append(val)
         print "\tCollection complete.\t\t\t\t\t"
-        avg = sum(chunk)/len(chunk)
+        med = np.median(np.array(chunk))
         print "\tWriting chunk to disk:"
         disparity = 0
         with open(bitfile, 'a') as bf:
             for i in xrange(0, chunk_max):
-                if chunk[i] > avg:
+                if chunk[i] > med:
                     bf.write("1")
                     disparity+=1
-                elif chunk[i] < avg:
+                elif chunk[i] < med:
                     disparity-=1
                     bf.write("0")
             bf.close()
