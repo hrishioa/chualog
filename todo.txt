@@ -1,3 +1,7 @@
 Install jumpers to resistors so they can be disconnected and measured
 Run the system and measure fft and time response to see if it's the same as the original circuit
 Reproduce voltage clipping
+Looking at simulation code to see if it can be modified
+Buy: 9 volt batteries, 9V wall wart, jumpers, USB oscilloscope on element14
+Try implementing desktop power supply
+
