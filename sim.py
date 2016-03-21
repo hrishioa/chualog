@@ -3,9 +3,11 @@ def RealChua(inv, timestep):
     y = float(inv[1]) #v_2
     z = float(inv[2]) #i_L
 
-    C1  = 10*10^(-9)   #10nF
+    # C1  = 10*10^(-9)   #10nF
+    C1 = 8*(10^(-9))
     C2  = 100*10^(-9)  #100nF
-    R = 1800           #1.8k Ohms
+    # R = 1800           #1.8k Ohms
+    R = 2.1*1000
     G = 1/R
 
     #Chua Diode*************************************

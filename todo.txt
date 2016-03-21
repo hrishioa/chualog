@@ -1,0 +1,3 @@
+Install jumpers to resistors so they can be disconnected and measured
+Run the system and measure fft and time response to see if it's the same as the original circuit
+Reproduce voltage clipping

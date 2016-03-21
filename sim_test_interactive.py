@@ -1,40 +1,6 @@
-from scipy.integrate import odeint
 from pylab import *
-from sim import RealChua
-
-def Lorenz(state,t):
-  # unpack the state vector
-  x = state[0]
-  y = state[1]
-  z = state[2]
-
-  # these are our constants
-  sigma = 10.0
-  rho = 28.0
-  beta = 8.0/3.0
-
-  # compute state derivatives
-  xd = sigma * (y-x)
-  yd = (rho-z)*x - y
-  zd = x*y - beta*z
-
-  # return the state derivatives
-  return [xd, yd, zd]
-
-state0 = [2.0, 3.0, 4.0]
-t = arange(0.0, 30.0, 0.01)
-
-state = odeint(Lorenz, state0, t)
-
-# do some fancy 3D plotting
-from mpl_toolkits.mplot3d import Axes3D
-fig = figure()
-ax = fig.gca(projection='3d')
-ax.plot(state[:,0],state[:,1],state[:,2])
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z')
-show()
+from sim_test import Lorenz
+from scipy.integrate import odeint
 
 t = arange(0.0, 30, 0.01)
 
@@ -57,13 +23,9 @@ pp, = plot(state1[10,0],state1[10,1],'b.',markersize=10)
 p2, = plot(state2[0:10,0],state2[0:10,1],'r-')
 pp2, = plot(state2[10,0],state2[10,1],'r.',markersize=10)
 tt = title("%4.2f sec" % 0.00)
-
-show()
-
-
 # animate
 step = 3
-for i in xrange(1,shape(state1)[0]-19,step):
+for i in xrange(1,shape(state1)[0]-10,step):
   p.set_xdata(state1[10+i:20+i,0])
   p.set_ydata(state1[10+i:20+i,1])
   pp.set_xdata(state1[19+i,0])
