@@ -1,6 +1,25 @@
 from scipy.integrate import odeint
 from pylab import *
-from sim import RealChua
+import sim
+
+def chua(inv, t):
+
+    x = inv[0];
+    y = inv[1];
+    z = inv[2];
+
+    alpha  = 15.6;
+    beta   = 28;
+    m0     = -1.143;
+    m1     = -0.714;
+
+    h = m1*x+0.5*(m0-m1)*(abs(x+1)-abs(x-1));
+
+    xdot = alpha*(y-x-h);
+    ydot = x - y+ z;
+    zdot  = -beta*y;
+
+    return [xdot,ydot,zdot]
 
 def Lorenz(state,t):
   # unpack the state vector
@@ -21,62 +40,25 @@ def Lorenz(state,t):
   # return the state derivatives
   return [xd, yd, zd]
 
-state0 = [2.0, 3.0, 4.0]
-t = arange(0.0, 30.0, 0.01)
+state0 = [-4, -1.5, 1]
+# t = arange(0.0, 30.0, 0.01)
+t = arange(0,0.05,0.000001)
 
-state = odeint(Lorenz, state0, t)
+while(True):
+    sim.R = input("Enter a value for R:")
+    sim.R10 = input("Enter a value for R10:")
 
-# do some fancy 3D plotting
-from mpl_toolkits.mplot3d import Axes3D
-fig = figure()
-ax = fig.gca(projection='3d')
-ax.plot(state[:,0],state[:,1],state[:,2])
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z')
-show()
+    state = odeint(sim.RealChua, [0.7,1,1], arange(0,100,0.1))
+    # state = odeint(chua, [0.7, 0, 0], arange(0, 100, 0.1))
 
-t = arange(0.0, 30, 0.01)
+    # state = odeint(Lorenz, state0, t)
 
-# original initial conditions
-state1_0 = [2.0, 3.0, 4.0]
-state1 = odeint(Lorenz, state1_0, t)
-
-# rerun with very small change in initial conditions
-delta = 0.0001
-state2_0 = [2.0+delta, 3.0, 4.0]
-state2 = odeint(Lorenz, state2_0, t)
-
-# animation
-figure()
-pb, = plot(state1[:,0],state1[:,1],'b-',alpha=0.2)
-xlabel('x')
-ylabel('y')
-p, = plot(state1[0:10,0],state1[0:10,1],'b-')
-pp, = plot(state1[10,0],state1[10,1],'b.',markersize=10)
-p2, = plot(state2[0:10,0],state2[0:10,1],'r-')
-pp2, = plot(state2[10,0],state2[10,1],'r.',markersize=10)
-tt = title("%4.2f sec" % 0.00)
-
-show()
-
-
-# animate
-step = 3
-for i in xrange(1,shape(state1)[0]-19,step):
-  p.set_xdata(state1[10+i:20+i,0])
-  p.set_ydata(state1[10+i:20+i,1])
-  pp.set_xdata(state1[19+i,0])
-  pp.set_ydata(state1[19+i,1])
-  p2.set_xdata(state2[10+i:20+i,0])
-  p2.set_ydata(state2[10+i:20+i,1])
-  pp2.set_xdata(state2[19+i,0])
-  pp2.set_ydata(state2[19+i,1])
-  tt.set_text("%4.2f sec" % (i*0.01))
-  draw()
-
-i = 1939          # the two simulations really diverge here!
-s1 = state1[i,:]
-s2 = state2[i,:]
-d12 = norm(s1-s2) # distance
-print ("distance = %f for a %f different in initial condition") % (d12, delta)
+    # do some fancy 3D plotting
+    from mpl_toolkits.mplot3d import Axes3D
+    fig = figure()
+    ax = fig.gca(projection='3d')
+    ax.plot(state[:,0],state[:,1],state[:,2])
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+    show()

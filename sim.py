@@ -1,4 +1,9 @@
+R = 2.1*1000
+R10 = 1.8*1000
+
 def RealChua(inv, timestep):
+    global R
+    global R10
     x = float(inv[0]) #%v_1
     y = float(inv[1]) #v_2
     z = float(inv[2]) #i_L
@@ -7,7 +12,7 @@ def RealChua(inv, timestep):
     C1 = 8*(10^(-9))
     C2  = 100*10^(-9)  #100nF
     # R = 1800           #1.8k Ohms
-    R = 2.1*1000
+    # R = 2.1*1000
     G = 1/R
 
     #Chua Diode*************************************
@@ -59,7 +64,6 @@ def RealChua(inv, timestep):
     R7  = 100;  #100 Ohms
     R8  = 1000; #1k Ohms
     R9  = 1000; #1k Ohms
-    R10 = 1800;
     C   = 100*10^(-9); #100nF
     L = R7*R9*C*R10/R8; #18mH
 
